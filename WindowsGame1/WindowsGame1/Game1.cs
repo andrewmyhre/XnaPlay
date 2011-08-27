@@ -22,6 +22,7 @@ namespace WindowsGame1
         public static bool CaptureMouse=true;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        private KeyboardState _stateLastFrame;
 
         public Game1()
         {
@@ -40,10 +41,11 @@ namespace WindowsGame1
             // TODO: Add your initialization logic here
             Tad.Xna.Common.BasicSetup.AddGodAvatarWithCamera(this);
 
-            Components.Add(new Globe(this)
+            Components.Add(new Icosahedron(this)
                 {Position=new Vector3(0,0,-300),DrawWireframe = true});
             Components.Add(new Cube(this, new Vector3(0, 0, -300), 150f) { DrawWireframe = true });
-
+            GraphicsDevice.RasterizerState = new RasterizerState(){CullMode = CullMode.None};
+            
             base.Initialize();
         }
 
@@ -79,6 +81,15 @@ namespace WindowsGame1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
+            var keyboard = Keyboard.GetState();
+            if (keyboard.IsKeyDown(Keys.PageUp)
+                && (_stateLastFrame==null || !_stateLastFrame.IsKeyDown(Keys.PageUp)))
+            {
+                Camera.Default.AttachTo(Avatar.NextAvatar());
+            }
+
+            _stateLastFrame = keyboard;
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -91,7 +102,6 @@ namespace WindowsGame1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             // TODO: Add your drawing code here
             base.Draw(gameTime);
         }

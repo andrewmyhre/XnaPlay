@@ -9,15 +9,13 @@ using Tad.Xna.Common.Entities;
 
 namespace WindowsGame1
 {
-    public class Globe : GameEntity
+    public class Icosahedron : GameEntity
     {
         BasicEffect effect;
-        private VertexBuffer testVBuffer;
-        private IndexBuffer testIBuffer;
         private VertexPositionColor[] vertices;
         private int[] indices;
 
-        public Globe(Game game) : base(game)
+        public Icosahedron(Game game) : base(game)
         {
             IsStatic = true;
         }
@@ -73,12 +71,6 @@ namespace WindowsGame1
                 7,2,11            
             };
 
-            testVBuffer = new VertexBuffer(GraphicsDevice, VertexPositionColor.VertexDeclaration, vertices.Length, BufferUsage.WriteOnly);
-            testVBuffer.SetData(vertices);
-
-            testIBuffer = new IndexBuffer(Game.GraphicsDevice, typeof(int), indices.Length, BufferUsage.WriteOnly);
-            testIBuffer.SetData(indices);
-
             effect = new BasicEffect(Game.GraphicsDevice);
             effect.EnableDefaultLighting();
             effect.LightingEnabled = false;
@@ -91,9 +83,6 @@ namespace WindowsGame1
 
         public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.SetVertexBuffer(testVBuffer);
-            GraphicsDevice.Indices = testIBuffer;
-
             effect.Projection = Camera.Default.ProjectionMatrix;
             effect.View = Camera.Default.ViewMatrix;
             effect.World = Matrix.Identity
